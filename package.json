@@ -6,6 +6,12 @@
   "workspaces": [
     "components"
   ],
+  "files": [
+    "README.md",
+    "LICENCE",
+    "package.json",
+    "dist"
+  ],
   "scripts": {
     "dev": "cd components && yarn dev",
     "build": "cd components && yarn build"
