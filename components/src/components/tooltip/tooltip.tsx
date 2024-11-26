@@ -6,7 +6,9 @@ import {
 } from 'atomico';
 
 const Tooltip = c(
-    () => {
+    ({
+        isActive,
+    }) => {
         const tooltipRef = useRef<HTMLDivElement>(null);
         const [position, setPosition] = useState({x: 0, y: 0});
 
@@ -20,15 +22,13 @@ const Tooltip = c(
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
 
-            let x = clientX + 10; // Offset from the mouse position
+            let x = clientX + 10;
             let y = clientY + 10;
 
-            // Prevent overflow on the right side
             if (x + tooltipRect.width > viewportWidth) {
                 x = clientX - tooltipRect.width - 10;
             }
 
-            // Prevent overflow on the bottom side
             if (y + tooltipRect.height > viewportHeight) {
                 y = clientY - tooltipRect.height - 10;
             }
@@ -55,6 +55,7 @@ const Tooltip = c(
                         pointerEvents: 'none',
                         whiteSpace: 'nowrap',
                         zIndex: 1000,
+                        display: isActive ? 'block' : 'none',
                     }}
                 >
                     <slot name="tooltip" />
@@ -64,6 +65,10 @@ const Tooltip = c(
     },
     {
         props: {
+            isActive: {
+                type: Boolean,
+                reflect: true,
+            },
         },
     },
 );

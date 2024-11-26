@@ -1,33 +1,63 @@
-import {c} from 'atomico';
-import useWorldMap from './hooks/useWorldMap';
+import {
+    c,
+    css,
+    useEffect,
+    useMemo,
+    useState,
+} from 'atomico';
+import useWorldMap, {ActiveCountryModeEnum} from './hooks/useWorldMap';
 import {useChildNodes} from '@atomico/hooks/use-child-nodes';
 import useMapData from './hooks/useMapData';
 import Tooltip from '../tooltip/tooltip';
+import styles from './world-map.module.css';
+import stylesInline from './world-map.module.css?inline';
 
 const WorldMap = c(
     ({
-        showAntarctica,
+        activeCountryMode,
     }) => {
         const childNodes = useChildNodes();
-        const {countriesToHighlight} = useMapData(childNodes);
+        const [showTooltip, setShowTooltip] = useState(false);
+        const {
+            countriesToHighlight,
+            tooltipData,
+            countryGroups,
+        } = useMapData(childNodes);
         const [
             svgRef, {
                 dimensions,
+                activeCountry,
             },
         ] = useWorldMap({
-            showAntarctica,
             countriesToHighlight,
+            activeCountryMode,
+            countryGroups,
         });
 
+        useEffect(() => {
+            if (activeCountry) {
+                setShowTooltip(true);
+
+                return;
+            }
+
+            setShowTooltip(false);
+        }, [activeCountry]);
+
+        const activeRegionData = useMemo(() => {
+            if (!activeCountry) {
+                return null;
+            }
+
+            const regionData = tooltipData.find(item => item.countryCode.includes(activeCountry));
+
+            return regionData;
+        }, [activeCountry, tooltipData]);
+
         return (
-            <host>
+            <host shadowDom>
                 <div
-                    style={{
-                        width: '100%',
-                        height: 'auto',
-                        position: 'relative',
-                        aspectRatio: '16 / 7',
-                    }}
+                    className={styles.mapContainer}
                 >
                     <svg
                         ref={svgRef}
@@ -38,28 +68,30 @@ const WorldMap = c(
                     >
                     </svg>
                 </div>
-                <Tooltip>
-                    <span
+                <Tooltip isActive={showTooltip}>
+                    <div
                         slot="tooltip"
-                        style={{
-                            padding: '5px 10px',
-                            backgroundColor: '#333',
-                            color: '#fff',
-                            borderRadius: '4px',
-                        }}
+                        className={styles.tooltipContent}
                     >
-                        Hello
-                    </span>
+                        {activeRegionData && (
+                            <>
+                                <strong>{activeRegionData.title}</strong>
+                                <br />
+                                {activeRegionData.value}
+                            </>
+                        )}
+                    </div>
                 </Tooltip>
             </host>
         );
     },
     {
+        styles: css`${stylesInline}`,
         props: {
-            showAntarctica: {
-                type: Boolean,
+            activeCountryMode: {
+                type: String,
                 reflect: true,
-                value: false,
+                value: ActiveCountryModeEnum.HOVER,
             },
             children: {
                 type: Element,

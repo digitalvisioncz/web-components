@@ -1,0 +1,20 @@
+.tooltipContent {
+    padding: 10px;
+    font-size: 12px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+}
+
+.mapContainer {
+    position: relative;
+    aspect-ratio: 16 / 7;
+    width: 100%;
+    height: auto;
+
+    & path {
+        transition: fill .3s;
+    }
+}

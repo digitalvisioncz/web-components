@@ -5,11 +5,36 @@
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Composable map</title>
-      <script async type="module" src="./dist/world-map/index.js"></script>
+      <script async type="module" src="dist/world-map/world-map.js"></script>
+      <style>
+        body {
+          --dv-world-map-country-highlight: #ffc107;
+        }
+      </style>
   </head>
 
   <body>
-      <dv-maps-world-map></dv-maps-world-map>
+      <dv-world-map>
+        <script>
+          [
+            {
+              "title": "United States",
+              "countries": ["840"],
+              "value": "Strategic purchases"
+            },
+            {
+              "title": "CZ+SK",
+              "countries": ["203", "703"],
+              "value": "Structured purchases"
+            },
+            {
+              "title": "Brazil",
+              "countries": ["076"],
+              "value": "Tenders into power plants"
+            }
+          ]
+        </script>
+      </dv-world-map>
   </body>
 
 </html>

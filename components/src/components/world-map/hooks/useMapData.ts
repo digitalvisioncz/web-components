@@ -10,6 +10,7 @@ interface TooltipData {
 
 const useMapData = (childNodes: ChildNode[]) => {
     const [data, setData] = useState<WorldMapData | null>(null);
+    const [countryGroups, setCountryGroups] = useState<string[][]>([]);
     const [countriesToHighlight, setCountriesToHighlight] = useState<string[]>([]);
     const [tooltipData, setTooltipData] = useState<TooltipData[] | null>(null);
 
@@ -43,11 +44,16 @@ const useMapData = (childNodes: ChildNode[]) => {
         }));
 
         setTooltipData(tooltipData);
+
+        const groups = data.map(item => item.countries);
+
+        setCountryGroups(groups);
     }, [data]);
 
     return {
         countriesToHighlight: countriesToHighlight,
         tooltipData: tooltipData,
+        countryGroups: countryGroups,
     };
 };
 

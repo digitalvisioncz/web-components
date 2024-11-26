@@ -1,11 +1,13 @@
 import {
     Ref,
+    useCallback,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from 'atomico';
 import {
-    geoEquirectangular,
+    geoNaturalEarth1,
     geoPath,
     GeoProjection,
 } from 'd3-geo';
@@ -13,6 +15,11 @@ import {FeatureCollection} from 'geojson';
 import {Topology} from 'topojson-specification';
 import {feature} from 'topojson-client';
 import mapCountriesData from '../data/countries-110m.json';
+
+export enum ActiveCountryModeEnum {
+    CLICK = 'click',
+    HOVER = 'hover',
+}
 
 interface OnCountryCallbackProps {
     countryId: string | number,
@@ -26,8 +33,9 @@ interface OnCountryHoverProps extends OnCountryCallbackProps {
 }
 
 type UseWorldMap = (props: {
-    showAntarctica: boolean,
     countriesToHighlight?: string[],
+    countryGroups?: string[][],
+    activeCountryMode?: ActiveCountryModeEnum,
     onCountryClick?: (props: OnCountryClickProps) => void,
     onCountryMouseHover?: (props: OnCountryHoverProps) => void,
     onCountryMouseOut?: (props: OnCountryHoverProps) => void,
@@ -37,19 +45,29 @@ type UseWorldMap = (props: {
             width: number,
             height: number,
         },
+        activeCountry: string | null,
     }];
 
 const useWorldMap: UseWorldMap = ({
-    showAntarctica,
     onCountryClick,
+    countryGroups = [],
     onCountryMouseHover,
     onCountryMouseOut,
     countriesToHighlight,
+    activeCountryMode = ActiveCountryModeEnum.HOVER,
 }) => {
     const svgRef = useRef<SVGElement>();
     const [countriesData, setCountriesData] = useState<FeatureCollection | null>(null);
+    const [countriesActiveState, setCountriesActiveState] = useState<Record<string, boolean>>({});
     const [landData, setLandData] = useState<FeatureCollection | null>(null);
     const [dimensions, setDimensions] = useState({width: 800, height: 450});
+
+    const findGroupForCountry = useCallback((countryId: string): string[] => countryGroups.find(group => group.includes(countryId)) || [], [countryGroups]);
+    const activeCountry = useMemo(() => {
+        const activeCountry = Object.keys(countriesActiveState).find(key => countriesActiveState[key]);
+
+        return activeCountry || null;
+    }, [countriesActiveState]);
 
     useEffect(() => {
         const updateDimensions = () => {
@@ -78,10 +96,6 @@ const useWorldMap: UseWorldMap = ({
                     return true;
                 }
 
-                if (showAntarctica) {
-                    return true;
-                }
-
                 return false;
             });
 
@@ -95,10 +109,6 @@ const useWorldMap: UseWorldMap = ({
                     return true;
                 }
 
-                if (showAntarctica) {
-                    return true;
-                }
-
                 return false;
             });
 
@@ -109,13 +119,13 @@ const useWorldMap: UseWorldMap = ({
     }, []);
 
     useEffect(() => {
-        if (!countriesData || !landData || !dimensions) {
+        if (!countriesData || !landData || !countryGroups || !dimensions) {
             return;
         }
 
         const {width, height} = dimensions;
 
-        const projection: GeoProjection = geoEquirectangular().fitSize([width, height], countriesData);
+        const projection: GeoProjection = geoNaturalEarth1().fitSize([width, height], countriesData).rotate([-11, 0]);
         const pathGenerator = geoPath(projection);
 
         const svg = svgRef.current;
@@ -143,6 +153,8 @@ const useWorldMap: UseWorldMap = ({
             group.appendChild(path);
         });
 
+        const countryPaths: Record<string, SVGPathElement> = {};
+
         countriesData.features.forEach(feature => {
             if (!feature.id) {
                 return;
@@ -157,11 +169,11 @@ const useWorldMap: UseWorldMap = ({
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
             path.setAttribute('d', d);
-
             path.setAttribute('fill', 'transparent');
 
             if (countriesToHighlight && countriesToHighlight.includes(feature.id as string)) {
-                path.setAttribute('fill', 'red');
+                path.setAttribute('fill', 'var(--dv-world-map-country-highlight, #ffc107)');
+                countryPaths[feature.id as string] = path;
             }
 
             path.addEventListener('click', () => {
@@ -180,6 +192,23 @@ const useWorldMap: UseWorldMap = ({
                         path,
                     });
                 }
+
+                if (activeCountryMode === ActiveCountryModeEnum.HOVER && countriesToHighlight.includes(feature.id as string)) {
+                    setCountriesActiveState(prevState => ({
+                        ...prevState,
+                        [feature.id as string]: true,
+                    }));
+
+                    const group = findGroupForCountry(feature.id as string);
+
+                    group.forEach(id => {
+                        const groupPath = countryPaths[id];
+
+                        if (groupPath) {
+                            groupPath.setAttribute('fill', 'var(--dv-world-map-country-hover, #ffc107)');
+                        }
+                    });
+                }
             });
 
             path.addEventListener('mouseout', () => {
@@ -187,6 +216,28 @@ const useWorldMap: UseWorldMap = ({
                     onCountryMouseOut({
                         countryId: feature.id,
                         path,
+                    });
+                }
+
+                if (activeCountryMode === ActiveCountryModeEnum.HOVER && countriesToHighlight.includes(feature.id as string)) {
+                    setCountriesActiveState(prevState => ({
+                        ...prevState,
+                        [feature.id as string]: false,
+                    }));
+
+                    const group = findGroupForCountry(feature.id as string);
+
+                    group.forEach(id => {
+                        const groupPath = countryPaths[id];
+
+                        if (groupPath) {
+                            groupPath.setAttribute(
+                                'fill',
+                                countriesToHighlight?.includes(id)
+                                    ? 'var(--dv-world-map-country-highlight, #ffc107)'
+                                    : 'transparent',
+                            );
+                        }
                     });
                 }
             });
@@ -200,11 +251,14 @@ const useWorldMap: UseWorldMap = ({
         landData,
         countriesToHighlight,
         dimensions,
+        countryGroups,
+        activeCountryMode,
     ]);
 
     return [
         svgRef, {
             dimensions,
+            activeCountry,
         },
     ];
 };
