@@ -1,6 +1,6 @@
 {
   "name": "@dvdevcz/components",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
   "packageManager": "yarn@4.5.1",
   "workspaces": [
@@ -16,9 +16,10 @@
   "exports": {
     "./*": "./dist/*"
   },
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "cd components && yarn dev",
-    "build": "cd components && yarn build",
+    "build": "cd components && yarn build && node ../scripts/generate-components-declarations.js",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
