@@ -1,12 +1,8 @@
 import atomico from '@atomico/vite';
 import svgr from 'vite-plugin-svgr';
 import {defineConfig} from 'vite';
-import {
-    extname,
-    relative,
-} from 'path';
-import {fileURLToPath} from 'node:url';
-import {glob} from 'glob';
+import path from 'node:path';
+import {globSync} from 'glob';
 
 export default defineConfig({
     build: {
@@ -16,19 +12,24 @@ export default defineConfig({
         outDir: '../dist',
         rollupOptions: {
             input: Object.fromEntries(
-                glob.sync('src/components/**/*.{ts,tsx}', {
-                    ignore: ['src/components/**/*.d.ts'],
-                }).map(file => [
-                    relative(
-                        'src/components',
-                        file.slice(0, file.length - extname(file).length),
-                    ), fileURLToPath(new URL(file, import.meta.url)),
+                globSync('src/components/**/index.ts').map(file => [
+                    path
+                        .relative('src/components', path.dirname(file))
+                        .replace(/\\/g, '/'), path.resolve(file),
                 ]),
             ),
             output: {
-                assetFileNames: 'assets/[name][extname]',
+                format: 'es',
+                dir: '../dist',
                 entryFileNames: '[name].js',
+                assetFileNames: 'assets/[name][extname]',
+                chunkFileNames: 'chunks/[name].js',
             },
+            preserveEntrySignatures: 'strict',
+        },
+        lib: {
+            entry: globSync('src/components/**/index.ts'),
+            formats: ['es'],
         },
     },
     css: {

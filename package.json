@@ -1,6 +1,6 @@
 {
   "name": "@dvdevcz/components",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "packageManager": "yarn@4.5.1",
   "workspaces": [
@@ -12,6 +12,10 @@
     "package.json",
     "dist"
   ],
+  "main": "dist/index.js",
+  "exports": {
+    "./*": "./dist/*"
+  },
   "scripts": {
     "dev": "cd components && yarn dev",
     "build": "cd components && yarn build",

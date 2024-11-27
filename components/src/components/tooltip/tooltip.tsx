@@ -76,5 +76,3 @@ const Tooltip = c(
 );
 
 export default Tooltip;
-
-customElements.define('dv-tooltip', Tooltip);

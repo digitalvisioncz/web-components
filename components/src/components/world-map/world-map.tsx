@@ -9,7 +9,7 @@ import {useChildNodes} from '@atomico/hooks/use-child-nodes';
 
 import useMapData from './hooks/useMapData';
 import useWorldMap, {ActiveCountryModeEnum} from './hooks/useWorldMap';
-import Tooltip from '../tooltip/tooltip';
+import Tooltip from '../tooltip';
 
 import styles from './world-map.module.css';
 import stylesInline from './world-map.module.css?inline';
@@ -110,5 +110,3 @@ const WorldMap = c(
 );
 
 export default WorldMap;
-
-customElements.define('dv-world-map', WorldMap);
