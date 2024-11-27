@@ -15,6 +15,6 @@
       "components/src/**/*",
       ".eslintrc.cjs",
       "components/vite.config.js",
-      "docs/**/*"
+      "docs/.vitepress/**/*"
   ],
 }

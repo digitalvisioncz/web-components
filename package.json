@@ -14,7 +14,10 @@
   ],
   "scripts": {
     "dev": "cd components && yarn dev",
-    "build": "cd components && yarn build"
+    "build": "cd components && yarn build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
     "@dvdevcz/eslint": "^0.3.3",
@@ -25,6 +28,7 @@
     "eslint-plugin-import": "^2.31.0",
     "lightningcss": "^1.28.1",
     "typescript": "^5.6.3",
-    "typescript-plugin-css-modules": "^5.1.0"
+    "typescript-plugin-css-modules": "^5.1.0",
+    "vitepress": "^1.5.0"
   }
 }

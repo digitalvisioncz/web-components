@@ -28,7 +28,7 @@
     margin: 0;
     font-size: var(--dv-world-map-tooltip-description-font-size, .9em);
     font-weight: var(--dv-world-map-tooltip-description-font-weight, 400);
-    color: var(--dv-world-map-tooltip-description-color, #333);
+    color: var(--dv-world-map-tooltip-description-color, #555);
 }
 
 .mapContainer {

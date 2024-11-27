@@ -1,1 +1,1 @@
-# @dvdevcz:maps
+# @dvdevcz/components

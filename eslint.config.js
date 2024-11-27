@@ -9,7 +9,6 @@ export default [
             '@typescript-eslint/no-unsafe-return': 'off',
             '@typescript-eslint/no-unsafe-assignment': 'off',
             'react/no-unknown-property': ['error', {ignore: ['shadowDom']}],
-
         },
     },
 ];
