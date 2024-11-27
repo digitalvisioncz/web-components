@@ -5,10 +5,12 @@ import {
     useMemo,
     useState,
 } from 'atomico';
-import useWorldMap, {ActiveCountryModeEnum} from './hooks/useWorldMap';
 import {useChildNodes} from '@atomico/hooks/use-child-nodes';
+
 import useMapData from './hooks/useMapData';
+import useWorldMap, {ActiveCountryModeEnum} from './hooks/useWorldMap';
 import Tooltip from '../tooltip/tooltip';
+
 import styles from './world-map.module.css';
 import stylesInline from './world-map.module.css?inline';
 
@@ -71,13 +73,20 @@ const WorldMap = c(
                 <Tooltip isActive={showTooltip}>
                     <div
                         slot="tooltip"
-                        className={styles.tooltipContent}
+                        className={styles.tooltipWrapper}
                     >
                         {activeRegionData && (
                             <>
-                                <strong>{activeRegionData.title}</strong>
-                                <br />
-                                {activeRegionData.value}
+                                <h5
+                                    className={styles.tooltipTitle}
+                                >
+                                    {activeRegionData.title}
+                                </h5>
+                                <span
+                                    className={styles.tooltipDescription}
+                                >
+                                    {activeRegionData.description}
+                                </span>
                             </>
                         )}
                     </div>

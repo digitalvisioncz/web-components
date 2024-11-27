@@ -9,6 +9,7 @@
   "dependencies": {
     "@atomico/hooks": "^4.4.1",
     "atomico": "latest",
+    "clsx": "^2.1.1",
     "d3-geo": "^3.1.1",
     "topojson-client": "^3.1.0",
     "valibot": "^1.0.0-beta.8"

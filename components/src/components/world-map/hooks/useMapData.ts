@@ -5,7 +5,7 @@ import {WorldMapData, WorldMapDataArray} from '../helpers/validation';
 interface TooltipData {
     countryCode: string,
     title: string,
-    value?: string | number,
+    description?: string | number,
 }
 
 const useMapData = (childNodes: ChildNode[]) => {
@@ -40,7 +40,7 @@ const useMapData = (childNodes: ChildNode[]) => {
         const tooltipData = countries.map(item => ({
             countryCode: item,
             title: data.find(d => d.countries.includes(item))?.title || '',
-            value: data.find(d => d.countries.includes(item))?.value || '',
+            description: data.find(d => d.countries.includes(item))?.description || '',
         }));
 
         setTooltipData(tooltipData);

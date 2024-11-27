@@ -6,6 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DV Web Components</title>
     <script async type="module" src="./src/components.ts"></script>
+      <style>
+        dv-world-map {
+          --dv-world-map-background: #fff;
+
+          --dv-world-map-land-background: #f0f0f0;
+          --dv-world-map-land-border-color: #ffc107;
+          --dv-world-map-land-border-width: 1;
+
+          --dv-world-map-region-background: #96c21c;
+          --dv-world-map-region-background-hover: #688b06;
+
+          --dv-world-map-tooltip-background: #fff;
+          --dv-world-map-tooltip-border-color: red;
+          --dv-world-map-tooltip-border-width: 1px;
+          --dv-world-map-tooltip-border-radius: 0.25rem;
+          --dv-world-map-tooltip-color: red;
+          --dv-world-map-tooltip-font-size: 1rem;
+          --dv-world-map-tooltip-padding: 0.5rem;
+
+          --dv-world-map-tooltip-title-color: #333;
+          --dv-world-map-tooltip-title-font-size: 1.25em;
+          --dv-world-map-tooltip-title-font-weight: 700;
+
+          --dv-world-map-tooltip-description-color: #666;
+          --dv-world-map-tooltip-description-font-size: .9em;
+          --dv-world-map-tooltip-description-font-weight: 400;
+        }
+      </style>
   </head>
 
   <body>
@@ -15,17 +43,17 @@
           {
             "title": "United States",
             "countries": ["840"],
-            "value": "Strategic purchases"
+            "description": "Strategic purchases"
           },
           {
             "title": "CZ+SK",
             "countries": ["203", "703"],
-            "value": "Structured purchases"
+            "description": "Structured purchases"
           },
           {
             "title": "Brazil",
             "countries": ["076"],
-            "value": "Tenders into power plants"
+            "description": "Tenders into power plants"
           }
         ]
       </script>

@@ -5,12 +5,13 @@ import {
     number,
     InferInput,
     union,
+    optional,
 } from 'valibot';
 
 const WorldMapData = object({
     title: string(),
     countries: array(string()),
-    value: union([number(), string()]),
+    description: optional(union([number(), string()])),
 });
 
 export const WorldMapDataArray = array(WorldMapData);

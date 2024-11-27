@@ -15,7 +15,9 @@ const Tooltip = c(
         const updatePosition = (event: MouseEvent) => {
             const tooltip = tooltipRef.current;
 
-            if (!tooltip) return;
+            if (!tooltip) {
+                return;
+            }
 
             const {clientX, clientY} = event;
             const tooltipRect = tooltip.getBoundingClientRect();

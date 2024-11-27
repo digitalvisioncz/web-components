@@ -147,8 +147,8 @@ const useWorldMap: UseWorldMap = ({
 
             path.setAttribute('d', d);
             path.setAttribute('fill', 'transparent');
-            path.setAttribute('stroke', '#333');
-            path.setAttribute('stroke-width', '0.1');
+            path.setAttribute('stroke', 'var(--dv-world-map-land-border-color, #333)');
+            path.setAttribute('stroke-width', 'var(--dv-world-map-land-border-width, 0.1)');
 
             group.appendChild(path);
         });
@@ -169,10 +169,10 @@ const useWorldMap: UseWorldMap = ({
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
             path.setAttribute('d', d);
-            path.setAttribute('fill', 'transparent');
+            path.setAttribute('fill', 'var(--dv-world-map-land-background, transparent)');
 
             if (countriesToHighlight && countriesToHighlight.includes(feature.id as string)) {
-                path.setAttribute('fill', 'var(--dv-world-map-country-highlight, #ffc107)');
+                path.setAttribute('fill', 'var(--dv-world-map-region-background, #ffc107)');
                 countryPaths[feature.id as string] = path;
             }
 
@@ -205,7 +205,7 @@ const useWorldMap: UseWorldMap = ({
                         const groupPath = countryPaths[id];
 
                         if (groupPath) {
-                            groupPath.setAttribute('fill', 'var(--dv-world-map-country-hover, #ffc107)');
+                            groupPath.setAttribute('fill', 'var(--dv-world-map-region-background-hover, #ffc107)');
                         }
                     });
                 }
@@ -234,7 +234,7 @@ const useWorldMap: UseWorldMap = ({
                             groupPath.setAttribute(
                                 'fill',
                                 countriesToHighlight?.includes(id)
-                                    ? 'var(--dv-world-map-country-highlight, #ffc107)'
+                                    ? 'var(--dv-world-map-region-background, #ffc107)'
                                     : 'transparent',
                             );
                         }
