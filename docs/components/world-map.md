@@ -38,18 +38,18 @@ import {WorldMap} from '@dvdevcz/components';
         [
             {
                 "title": "United States",
-                "description": "Strategic purchases"
-                "countries": ["840"],
+                "description": "Strategic purchases",
+                "countries": ["840"]
             },
             {
                 "title": "CZ+SK",
-                "description": "Structured purchases"
-                "countries": ["203", "703"],
+                "description": "Structured purchases",
+                "countries": ["203", "703"]
             },
             {
                 "title": "Brazil",
-                "description": "Tenders into power plants"
-                "countries": ["076"],
+                "description": "Tenders into power plants",
+                "countries": ["076"]
             }
         ]
     </script>
