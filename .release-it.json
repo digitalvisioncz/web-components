@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/release-it/release-it/main/schema/release-it.json",
+  "git": {
+    "requireBranch": "main",
+    "commitMessage": "chore: release v${version}",
+    "tagAnnotation": "v${version}"
+  },
+  "hooks": {
+    "before:init": ["git pull"]
+  },
+  "plugins": {
+    "release-it-changelogen": {
+      "disableVersion": true,
+      "templates": {
+        "commitMessage": "chore(release): v{{newVersion}}",
+        "tagMessage": "v{{newVersion}}",
+        "tagBody": "v{{newVersion}}"
+      }
+    }
+  },
+  "npm": {
+    "publish": true,
+    "access": "public"
+  }
+}
