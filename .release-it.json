@@ -19,6 +19,11 @@
       }
     }
   },
+  "github": {
+    "release": true,
+    "releaseName": "v${version}",
+    "releaseNotes": "CHANGELOG.md"
+  },
   "npm": {
     "publish": true,
     "access": "public"
