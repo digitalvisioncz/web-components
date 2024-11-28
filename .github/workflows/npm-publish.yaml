@@ -14,6 +14,15 @@ jobs:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
       - run: yarn
-      - run: yarn build && yarn release
+      - name: Initialize git
+        run: |
+          git config --global user.email "software@digitalvision.cz"
+          git config --global user.name "DVDEV"
+      - name: Initialize npm auth token
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+      - run: yarn build && yarn release --ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
