@@ -21,8 +21,7 @@
   },
   "github": {
     "release": true,
-    "releaseName": "v${version}",
-    "releaseNotes": "CHANGELOG.md"
+    "releaseName": "v${version}"
   },
   "npm": {
     "publish": true,
