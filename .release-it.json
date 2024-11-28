@@ -6,7 +6,8 @@
     "tagAnnotation": "v${version}"
   },
   "hooks": {
-    "before:init": ["git pull"]
+    "before:init": ["git pull"],
+    "after:bump": "git add CHANGELOG.md"
   },
   "plugins": {
     "release-it-changelogen": {
