@@ -1,6 +1,6 @@
 {
   "name": "@dvdevcz/components",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "type": "module",
   "packageManager": "yarn@4.5.1",
   "workspaces": [

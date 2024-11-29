@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.2.7
+
+[compare changes](https://github.com/digitalvisioncz/web-components/compare/v0.2.6...v0.2.7)
+
+### 🚀 Enhancements
+
+- Make tooltip copy optional feat: allow description to be array (for multiline descriptions) ([e213aee](https://github.com/digitalvisioncz/web-components/commit/e213aee))
+
+### ❤️ Contributors
+
+- Milan Zítka <milan@digitalvision.cz>
+
 ## v0.2.6
 
 [compare changes](https://github.com/digitalvisioncz/web-components/compare/v0.2.5...v0.2.6)
