@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.2.8
+
+[compare changes](https://github.com/digitalvisioncz/web-components/compare/v0.2.7...v0.2.8)
+
+### 📖 Documentation
+
+- **world-map:** Add correct usage way for JSX/TSX ([86c5f7a](https://github.com/digitalvisioncz/web-components/commit/86c5f7a))
+
+### ❤️ Contributors
+
+- Milan Zítka <milan@digitalvision.cz>
+
 ## v0.2.7
 
 [compare changes](https://github.com/digitalvisioncz/web-components/compare/v0.2.6...v0.2.7)
