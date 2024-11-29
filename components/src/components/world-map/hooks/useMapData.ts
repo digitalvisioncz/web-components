@@ -4,18 +4,23 @@ import {WorldMapData, WorldMapDataArray} from '../helpers/validation';
 
 interface TooltipData {
     countryCode: string,
-    title: string,
-    description?: string | number,
+    title?: string,
+    description?: string | string[],
 }
 
-const useMapData = (childNodes: ChildNode[]) => {
+interface UseMapDataProps {
+    childNodes: ChildNode[],
+    regions: WorldMapData,
+}
+
+const useMapData = ({childNodes, regions}: UseMapDataProps) => {
     const [data, setData] = useState<WorldMapData | null>(null);
     const [countryGroups, setCountryGroups] = useState<string[][]>([]);
     const [countriesToHighlight, setCountriesToHighlight] = useState<string[]>([]);
     const [tooltipData, setTooltipData] = useState<TooltipData[] | null>(null);
 
     useEffect(() => {
-        if (!childNodes || childNodes.length === 0) {
+        if (!childNodes || childNodes.length === 0 || regions) {
             return;
         }
 
@@ -27,6 +32,14 @@ const useMapData = (childNodes: ChildNode[]) => {
             setData(parsedData);
         }
     }, [childNodes]);
+
+    useEffect(() => {
+        if (!regions || (childNodes && childNodes.length > 0)) {
+            return;
+        }
+
+        setData(regions);
+    }, [regions]);
 
     useEffect(() => {
         if (!data) {

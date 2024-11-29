@@ -17,6 +17,7 @@ import stylesInline from './world-map.module.css?inline';
 const WorldMap = c(
     ({
         activeCountryMode,
+        regions,
     }) => {
         const childNodes = useChildNodes();
         const [showTooltip, setShowTooltip] = useState(false);
@@ -24,7 +25,10 @@ const WorldMap = c(
             countriesToHighlight,
             tooltipData,
             countryGroups,
-        } = useMapData(childNodes);
+        } = useMapData({
+            childNodes,
+            regions,
+        });
         const [
             svgRef, {
                 dimensions,
@@ -36,16 +40,6 @@ const WorldMap = c(
             countryGroups,
         });
 
-        useEffect(() => {
-            if (activeCountry) {
-                setShowTooltip(true);
-
-                return;
-            }
-
-            setShowTooltip(false);
-        }, [activeCountry]);
-
         const activeRegionData = useMemo(() => {
             if (!activeCountry) {
                 return null;
@@ -55,6 +49,24 @@ const WorldMap = c(
 
             return regionData;
         }, [activeCountry, tooltipData]);
+
+        const activeRegionDataHasTooltip = useMemo(() => {
+            if (!activeRegionData) {
+                return false;
+            }
+
+            return activeRegionData.title || activeRegionData.description;
+        }, [activeRegionData]);
+
+        useEffect(() => {
+            if (activeCountry && activeRegionDataHasTooltip) {
+                setShowTooltip(true);
+
+                return;
+            }
+
+            setShowTooltip(false);
+        }, [activeCountry, activeRegionDataHasTooltip]);
 
         return (
             <host shadowDom>
@@ -77,16 +89,28 @@ const WorldMap = c(
                     >
                         {activeRegionData && (
                             <>
-                                <h5
-                                    className={styles.tooltipTitle}
-                                >
-                                    {activeRegionData.title}
-                                </h5>
-                                <span
-                                    className={styles.tooltipDescription}
-                                >
-                                    {activeRegionData.description}
-                                </span>
+                                {activeRegionData.title && (
+                                    <h5
+                                        className={styles.tooltipTitle}
+                                    >
+                                        {activeRegionData.title}
+                                    </h5>
+                                )}
+                                {activeRegionData.description && (
+                                    <div
+                                        className={styles.tooltipDescription}
+                                    >
+                                        {(
+                                            Array.isArray(activeRegionData.description)
+                                                ? activeRegionData.description
+                                                : [activeRegionData.description]
+                                        ).map((description, index) => (
+                                            <span key={index}>
+                                                {description}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
@@ -101,6 +125,9 @@ const WorldMap = c(
                 type: String,
                 reflect: true,
                 value: ActiveCountryModeEnum.HOVER,
+            },
+            regions: {
+                type: Array,
             },
             children: {
                 type: Element,

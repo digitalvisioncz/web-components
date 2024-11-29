@@ -2,16 +2,19 @@ import {
     object,
     string,
     array,
-    number,
     InferInput,
     union,
     optional,
 } from 'valibot';
 
 const WorldMapData = object({
-    title: string(),
+    title: optional(string()),
     countries: array(string()),
-    description: optional(union([number(), string()])),
+    description: optional(
+        union(
+            [array(string()), string()],
+        ),
+    ),
 });
 
 export const WorldMapDataArray = array(WorldMapData);

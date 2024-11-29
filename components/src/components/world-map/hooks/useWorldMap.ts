@@ -19,6 +19,7 @@ import mapCountriesData from '../data/countries-110m.json';
 export enum ActiveCountryModeEnum {
     CLICK = 'click',
     HOVER = 'hover',
+    NONE = 'none',
 }
 
 interface OnCountryCallbackProps {

@@ -3,7 +3,7 @@
 }
 
 .tooltipWrapper {
-    padding: var(--dv-world-map-tooltip-padding, 2rem);
+    padding: var(--dv-world-map-tooltip-padding, 1rem);
     font-size: var(--dv-world-map-tooltip-font-size, 1rem);
     color: var(--dv-world-map-tooltip-color, #333);
     background-color: var(--dv-world-map-tooltip-background, #fff);
@@ -18,7 +18,7 @@
     font-weight: var(--dv-world-map-tooltip-title-font-weight, 700);
     color: var(--dv-world-map-tooltip-title-color, #333);
 
-    & + span {
+    & + .tooltipDescription {
         margin-top: .25rem;
     }
 }
@@ -28,7 +28,12 @@
     margin: 0;
     font-size: var(--dv-world-map-tooltip-description-font-size, .9em);
     font-weight: var(--dv-world-map-tooltip-description-font-weight, 400);
+    line-height: var(--dv-world-map-tooltip-description-line-height, 1.25);
     color: var(--dv-world-map-tooltip-description-color, #555);
+
+    & span {
+        display: block;
+    }
 }
 
 .mapContainer {
