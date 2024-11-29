@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.2.6
+
+[compare changes](https://github.com/digitalvisioncz/web-components/compare/v0.2.5...v0.2.6)
+
+### 📖 Documentation
+
+- Add Storybook for internal use ([4ef4a89](https://github.com/digitalvisioncz/web-components/commit/4ef4a89))
+
+### 🤖 CI
+
+- Build docs after release published ([f32e654](https://github.com/digitalvisioncz/web-components/commit/f32e654))
+
+### ❤️ Contributors
+
+- Milan Zítka <milan@digitalvision.cz>
+
 ## v0.2.5
 
 [compare changes](https://github.com/digitalvisioncz/web-components/compare/v0.2.4...v0.2.5)
