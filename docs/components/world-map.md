@@ -16,12 +16,12 @@ You can use this component with script tag in your `<head>` element
 
 or as a npm package
 
-```js
+```shell
 yarn add @dvdevcz/components
 ```
 
 ```js
-import {WorldMap} from '@dvdevcz/components';
+import '@dvdevcz/components/world-map';
 ```
 
 ## Usage
@@ -31,37 +31,42 @@ import {WorldMap} from '@dvdevcz/components';
 <dv-world-map></dv-world-map>
 ```
 
-### With tooltip data
+### With regions data
+
+#### HTML
 ```html
 <dv-world-map>
     <script type="application/json">
         [
             {
-                "title": "United States",
-                "description": "Strategic purchases",
-                "countries": ["840"]
-            },
-            {
                 "title": "CZ+SK",
                 "description": "Structured purchases",
                 "countries": ["203", "703"]
             },
-            {
-                "title": "Brazil",
-                "description": "Tenders into power plants",
-                "countries": ["076"]
-            }
         ]
     </script>
 </dv-world-map>
 ```
 
+#### JSX/TSX
+```jsx
+<dv-world-map
+    regions={[
+        {
+            title: 'CZ+SK',
+            description: 'Structured purchases',
+            countries: ['203', '703']
+        },
+    ]}
+></dv-world-map>
+```
+
 **Data object properties**
-| Property      | description                                                                                     | Example value        |
-| :------------ | :---------------------------------------------------------------------------------------------- | :------------------ |
-| *title*       | Tooltip title copy                                                                              | USA                 |
-| *description* | Tooltip description copy                                                                        | Strategic purchases |
-| *countries*   | Array of country codes ([ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric)) | ["840"]             |
+| Property      | description                                                                                     | Type                | Example value       |
+| :------------ | :---------------------------------------------------------------------------------------------- | :------------------ | :------------------ |
+| *countries*   | Array of country codes ([ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric)) | string[]            | ["840"]             |
+| *title*       | Tooltip title copy (optional)                                                                   | string              | USA                 |
+| *description* | Tooltip description copy (optional)                                                             | string \| string[] | Strategic purchases |
 
 
 ## Styling
@@ -87,3 +92,4 @@ import {WorldMap} from '@dvdevcz/components';
 | --dv-world-map-tooltip-description-color | #555 |
 | --dv-world-map-tooltip-description-font-size | .9em |
 | --dv-world-map-tooltip-description-font-weight | 400 |
+| --dv-world-map-tooltip-description-line-height | 1.25 |
