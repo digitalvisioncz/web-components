@@ -40,5 +40,8 @@ export default defineConfig({
             },
         },
     },
+    customElements: {
+        define: ['src/components/**/*'],
+    },
     plugins: [atomico({}), svgr()],
 });

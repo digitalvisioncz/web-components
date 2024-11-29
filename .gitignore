@@ -16,3 +16,5 @@ node_modules
 dist
 /**/cache/**/*
 .npmrc
+
+*storybook.log
