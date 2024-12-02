@@ -3,7 +3,13 @@ import {
     useRef,
     useState,
     useEffect,
+    useCallback,
+    css,
 } from 'atomico';
+import clsx from 'clsx';
+
+import style from './tooltip.module.css';
+import stylesInline from './tooltip.module.css?inline';
 
 const Tooltip = c(
     ({
@@ -12,7 +18,7 @@ const Tooltip = c(
         const tooltipRef = useRef<HTMLDivElement>(null);
         const [position, setPosition] = useState({x: 0, y: 0});
 
-        const updatePosition = (event: MouseEvent) => {
+        const updatePosition = useCallback((event: MouseEvent) => {
             const tooltip = tooltipRef.current;
 
             if (!tooltip) {
@@ -36,7 +42,7 @@ const Tooltip = c(
             }
 
             setPosition({x, y});
-        };
+        }, [setPosition, tooltipRef]);
 
         useEffect(() => {
             const handleMouseMove = (event: MouseEvent) => updatePosition(event);
@@ -47,17 +53,19 @@ const Tooltip = c(
         }, []);
 
         return (
-            <host shadowDom>
+            <host
+                shadowDom
+            >
                 <div
                     ref={tooltipRef}
+                    data-testid="tooltip"
+                    className={clsx(
+                        style.tooltip,
+                        isActive && style.visible,
+                    )}
                     style={{
-                        position: 'fixed',
-                        left: `${position.x}px`,
-                        top: `${position.y}px`,
-                        pointerEvents: 'none',
-                        whiteSpace: 'nowrap',
-                        zIndex: 1000,
-                        display: isActive ? 'block' : 'none',
+                        '--left': `${position.x}px`,
+                        '--top': `${position.y}px`,
                     }}
                 >
                     <slot name="tooltip" />
@@ -72,6 +80,7 @@ const Tooltip = c(
                 reflect: true,
             },
         },
+        styles: css`${stylesInline}`,
     },
 );
 

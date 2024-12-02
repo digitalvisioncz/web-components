@@ -1,0 +1,17 @@
+:host {
+    font-family: inherit;
+}
+
+.tooltip {
+    pointer-events: none;
+    position: fixed;
+    z-index: 1000;
+    top: var(--top, 0);
+    left: var(--left, 0);
+    display: none;
+    white-space: nowrap;
+    
+    &.visible {
+        display: block;
+    }
+}

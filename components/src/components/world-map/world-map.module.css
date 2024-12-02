@@ -44,7 +44,29 @@
     padding: 1%;
     background-color: var(--dv-world-map-background, transparent);
 
+    & g {
+        transform: translate(0, 0);
+    }
+
     & path {
         transition: fill .3s;
+    }
+
+    & .land {
+        fill: var(--dv-world-map-land-background, transparent);
+        stroke: var(--dv-world-map-land-border-color, #333);
+        stroke-width: var(--dv-world-map-land-border-width, .1);
+    }
+
+    & .landRegion {
+        fill: var(--dv-world-map-land-background, transparent);
+    }
+
+    & .highlightedRegion {
+        fill: var(--dv-world-map-region-background, #ffc107);
+    }
+
+    & .highlightedRegionHovered {
+        fill: var(--dv-world-map-region-background-hover, #b68903);
     }
 }
