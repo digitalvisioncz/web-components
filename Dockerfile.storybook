@@ -1,0 +1,17 @@
+FROM node:22
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
+COPY components/package.json ./components/package.json
+
+RUN yarn install
+
+COPY ./.env ./
+COPY tsconfig.json ./
+
+EXPOSE 6006
+
+CMD [ "yarn", "storybook:dev" ]

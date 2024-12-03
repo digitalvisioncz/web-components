@@ -35,6 +35,10 @@ export default {
                     },
                 }),
             ],
+            server: {
+                host: true,
+                open: false,
+            },
         });
     },
     docs: {},

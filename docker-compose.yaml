@@ -1,0 +1,30 @@
+networks:
+  webapp:
+    external: true
+  intnet:
+    external: false
+    name: '${CONTAINER_NAME_PREFIX}-intnet'
+
+services:
+  storybook:
+    build:
+      context: .
+      dockerfile: Dockerfile.storybook
+    working_dir: /usr/src/app
+    ports:
+      - "6006:6006"
+    container_name: '${CONTAINER_NAME_PREFIX}-storybook'
+    volumes:
+      - './.storybook:/usr/src/app/.storybook'
+      - './components:/usr/src/app/components'
+    environment:
+      - NODE_ENV=development
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=webapp
+      - 'traefik.http.routers.${CONTAINER_NAME_PREFIX}-storybook-secure.rule=HostRegexp(`${STORYBOOK_HOST}`)'
+      - 'traefik.http.routers.${CONTAINER_NAME_PREFIX}-storybook-secure.entrypoints=https,socketio'
+      - 'traefik.http.routers.${CONTAINER_NAME_PREFIX}-storybook-secure.tls=true'
+    networks:
+      - intnet
+      - webapp

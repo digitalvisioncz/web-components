@@ -24,7 +24,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "release": "release-it",
-    "storybook:dev": "storybook dev -p 6006",
+    "storybook:dev": "storybook dev -p 6006 --no-open",
     "storybook:build": "storybook build",
     "storybook:test": "test-storybook",
     "storybook:test:coverage": "test-storybook --coverage"
