@@ -17,6 +17,6 @@
       "components/vite.config.js",
       "docs/.vitepress/**/*",
       ".storybook/**/*",
-      "stories/**/*",
-  ],
+      "stories/**/*"
+  ]
 }
