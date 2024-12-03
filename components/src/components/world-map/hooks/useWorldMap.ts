@@ -15,6 +15,7 @@ import {FeatureCollection} from 'geojson';
 import {Topology} from 'topojson-specification';
 import {feature} from 'topojson-client';
 import mapCountriesData from '../data/countries-110m.json';
+import styles from '../world-map.module.css';
 
 export enum ActiveCountryModeEnum {
     CLICK = 'click',
@@ -135,8 +136,6 @@ const useWorldMap: UseWorldMap = ({
 
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
-        group.setAttribute('transform', 'translate(0, 0)');
-
         landData.features.forEach(feature => {
             const d = pathGenerator(feature);
 
@@ -147,9 +146,7 @@ const useWorldMap: UseWorldMap = ({
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
             path.setAttribute('d', d);
-            path.setAttribute('fill', '#fff');
-            path.setAttribute('stroke', 'var(--dv-world-map-land-border-color, #333)');
-            path.setAttribute('stroke-width', 'var(--dv-world-map-land-border-width, 0.1)');
+            path.classList.add(styles.land);
 
             group.appendChild(path);
         });
@@ -170,10 +167,11 @@ const useWorldMap: UseWorldMap = ({
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
             path.setAttribute('d', d);
-            path.setAttribute('fill', 'var(--dv-world-map-land-background, transparent)');
+            path.classList.add(styles.landRegion);
 
             if (countriesToHighlight && countriesToHighlight.includes(feature.id as string)) {
-                path.setAttribute('fill', 'var(--dv-world-map-region-background, #ffc107)');
+                path.dataset.testid = `region-${feature.id}`;
+                path.classList.add(styles.highlightedRegion);
                 countryPaths[feature.id as string] = path;
             }
 
@@ -206,7 +204,7 @@ const useWorldMap: UseWorldMap = ({
                         const groupPath = countryPaths[id];
 
                         if (groupPath) {
-                            groupPath.setAttribute('fill', 'var(--dv-world-map-region-background-hover, #b68903)');
+                            groupPath.classList.add(styles.highlightedRegionHovered);
                         }
                     });
                 }
@@ -232,12 +230,7 @@ const useWorldMap: UseWorldMap = ({
                         const groupPath = countryPaths[id];
 
                         if (groupPath) {
-                            groupPath.setAttribute(
-                                'fill',
-                                countriesToHighlight?.includes(id)
-                                    ? 'var(--dv-world-map-region-background, #ffc107)'
-                                    : 'var(--dv-world-map-land-background, transparent)',
-                            );
+                            groupPath.classList.remove(styles.highlightedRegionHovered);
                         }
                     });
                 }

@@ -11,7 +11,7 @@ Web component for simple world map with configurable countries/regions and optio
 You can use this component with script tag in your `<head>` element
 
 ```js
-<script src="https://cdn.jsdelivr.net/npm/@dvdevcz/components@latest/dist/world-map/world-map.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/@dvdevcz/components@latest/dist/world-map.js" type="module"></script>
 ```
 
 or as a npm package
@@ -66,7 +66,7 @@ import '@dvdevcz/components/world-map';
 | :------------ | :---------------------------------------------------------------------------------------------- | :------------------ | :------------------ |
 | *countries*   | Array of country codes ([ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric)) | string[]            | ["840"]             |
 | *title*       | Tooltip title copy (optional)                                                                   | string              | USA                 |
-| *description* | Tooltip description copy (optional)                                                             | string \| string[] | Strategic purchases |
+| *description* | Tooltip description copy (optional)                                                             | string \| string[]  | Strategic purchases |
 
 
 ## Styling

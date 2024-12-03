@@ -69,7 +69,10 @@ const WorldMap = c(
         }, [activeCountry, activeRegionDataHasTooltip]);
 
         return (
-            <host shadowDom>
+            <host
+                shadowDom
+                data-testid="world-map"
+            >
                 <div
                     className={styles.mapContainer}
                 >
@@ -86,12 +89,14 @@ const WorldMap = c(
                     <div
                         slot="tooltip"
                         className={styles.tooltipWrapper}
+                        data-testid="tooltip-wrapper"
                     >
                         {activeRegionData && (
                             <>
                                 {activeRegionData.title && (
                                     <h5
                                         className={styles.tooltipTitle}
+                                        data-testid="tooltip-title"
                                     >
                                         {activeRegionData.title}
                                     </h5>
@@ -99,6 +104,7 @@ const WorldMap = c(
                                 {activeRegionData.description && (
                                     <div
                                         className={styles.tooltipDescription}
+                                        data-testid="tooltip-description"
                                     >
                                         {(
                                             Array.isArray(activeRegionData.description)
@@ -128,6 +134,7 @@ const WorldMap = c(
             },
             regions: {
                 type: Array,
+                reflect: true,
             },
             children: {
                 type: Element,

@@ -19,45 +19,55 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "cd components && yarn dev",
-    "build": "cd components && yarn build && node ../scripts/generate-components-declarations.js",
+    "build": "cd components && yarn build && export NODE_ENV=production && node ../scripts/generate-components-declarations.js",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "release": "release-it",
-    "storybook:dev": "storybook dev -p 6006",
-    "storybook:build": "storybook build"
+    "storybook:dev": "storybook dev -p 6006 --no-open",
+    "storybook:build": "storybook build",
+    "storybook:test": "test-storybook",
+    "storybook:test:coverage": "test-storybook --coverage"
   },
   "devDependencies": {
     "@atomico/storybook": "^2.6.3",
-    "@chromatic-com/storybook": "^3.2.2",
     "@dvdevcz/eslint": "^0.3.3",
     "@dvdevcz/stylelint": "^0.1.0",
     "@dvdevcz/typescript-config": "^0.0.3",
-    "@storybook/addon-essentials": "^8.4.5",
-    "@storybook/addon-links": "^8.4.5",
-    "@storybook/blocks": "^8.4.5",
-    "@storybook/docs-tools": "^8.4.5",
-    "@storybook/test": "^8.4.5",
-    "@storybook/web-components": "^8.4.5",
-    "@storybook/web-components-vite": "^8.4.5",
+    "@playwright/test": "^1.49.0",
+    "@storybook/addon-coverage": "^1.0.4",
+    "@storybook/addon-essentials": "^8.4.6",
+    "@storybook/addon-interactions": "^8.4.6",
+    "@storybook/docs-tools": "^8.4.6",
+    "@storybook/react": "^8.4.6",
+    "@storybook/test": "^8.4.6",
+    "@storybook/test-runner": "^0.20.0",
+    "@storybook/testing-library": "^0.2.2",
+    "@storybook/web-components": "^8.4.6",
+    "@storybook/web-components-vite": "^8.4.6",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@types/babel__preset-env": "^7",
+    "@types/jest": "^29.5.14",
     "eslint": "^9.15.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-storybook": "^0.11.1",
     "lightningcss": "^1.28.1",
     "lit": "^3.2.1",
     "lit-html": "^3.2.1",
+    "playwright": "^1.49.0",
     "release-it": "^17.10.0",
     "release-it-changelogen": "^0.1.0",
-    "storybook": "^8.4.5",
+    "shadow-dom-testing-library": "^1.11.3",
+    "storybook": "^8.4.6",
     "typescript": "^5.6.3",
     "typescript-plugin-css-modules": "^5.1.0",
     "vite-tsconfig-paths": "^5.1.3",
     "vitepress": "^1.5.0"
   },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
+  "dependencies": {
+    "atomico": "^1.79.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }

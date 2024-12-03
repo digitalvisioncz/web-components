@@ -1,3 +1,4 @@
+import {dirname, join} from 'path';
 import {mergeConfig} from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import atomico from '@atomico/vite';
@@ -9,9 +10,13 @@ export default {
         '../components/*.stories.mdx',
         '../components/*.stories.@(js|jsx|ts|tsx)',
     ],
-    addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
+    addons: [
+        getAbsolutePath('@storybook/addon-essentials'),
+        getAbsolutePath('@storybook/addon-interactions'),
+        getAbsolutePath('@storybook/addon-coverage'),
+    ],
     framework: {
-        name: '@storybook/web-components-vite',
+        name: getAbsolutePath('@storybook/web-components-vite') as string,
         options: {},
     },
     viteFinal(config) {
@@ -30,7 +35,15 @@ export default {
                     },
                 }),
             ],
+            server: {
+                host: true,
+                open: false,
+            },
         });
     },
     docs: {},
 };
+
+function getAbsolutePath(value: string): any {
+    return dirname(require.resolve(join(value, 'package.json')));
+}
