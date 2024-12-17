@@ -1,25 +1,30 @@
 import {dirname, join} from 'path';
-import {mergeConfig} from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import atomico from '@atomico/vite';
 
 export default {
     stories: [
-        '../components/**/*.stories.mdx',
+        '../components/**/*.docs.mdx',
+        '../components/*.docs.mdx',
         '../components/**/*.stories.@(js|jsx|ts|tsx)',
-        '../components/*.stories.mdx',
         '../components/*.stories.@(js|jsx|ts|tsx)',
     ],
     addons: [
         getAbsolutePath('@storybook/addon-essentials'),
         getAbsolutePath('@storybook/addon-interactions'),
         getAbsolutePath('@storybook/addon-coverage'),
+        getAbsolutePath('@storybook/addon-docs'),
     ],
+    core: {
+        builder: '@storybook/builder-vite',
+    },
     framework: {
         name: getAbsolutePath('@storybook/web-components-vite') as string,
         options: {},
     },
-    viteFinal(config) {
+    async viteFinal(config) {
+        const {mergeConfig} = await import('vite');
+
         return mergeConfig(config, {
             define: {
                 global: 'window',
@@ -41,7 +46,9 @@ export default {
             },
         });
     },
-    docs: {},
+    docs: {
+        autodocs: 'tag',
+    },
 };
 
 function getAbsolutePath(value: string): any {
