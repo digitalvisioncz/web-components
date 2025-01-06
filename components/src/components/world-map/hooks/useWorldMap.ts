@@ -48,6 +48,7 @@ type UseWorldMap = (props: {
             height: number,
         },
         activeCountry: string | null,
+        hoveringCountry: string | null,
     }];
 
 const useWorldMap: UseWorldMap = ({
@@ -61,6 +62,7 @@ const useWorldMap: UseWorldMap = ({
     const svgRef = useRef<SVGElement>();
     const [countriesData, setCountriesData] = useState<FeatureCollection | null>(null);
     const [countriesActiveState, setCountriesActiveState] = useState<Record<string, boolean>>({});
+    const [countriesHoveringState, setCountriesHoveringState] = useState<Record<string, boolean>>({});
     const [landData, setLandData] = useState<FeatureCollection | null>(null);
     const [dimensions, setDimensions] = useState({width: 800, height: 450});
 
@@ -69,7 +71,13 @@ const useWorldMap: UseWorldMap = ({
         const activeCountry = Object.keys(countriesActiveState).find(key => countriesActiveState[key]);
 
         return activeCountry || null;
-    }, [countriesActiveState]);
+    }, [countriesActiveState, countriesHoveringState]);
+
+    const hoveringCountry = useMemo(() => {
+        const hoveringCountry = Object.keys(countriesHoveringState).find(key => countriesHoveringState[key]);
+
+        return hoveringCountry || null;
+    }, [countriesHoveringState, countriesActiveState]);
 
     useEffect(() => {
         const updateDimensions = () => {
@@ -153,6 +161,46 @@ const useWorldMap: UseWorldMap = ({
 
         const countryPaths: Record<string, SVGPathElement> = {};
 
+        const toggleCountry = (countryId: string, forcedState?: boolean) => {
+            setCountriesActiveState(prevState => ({
+                ...prevState,
+                [countryId]: forcedState !== undefined ? forcedState : !prevState[countryId],
+            }));
+
+            const group = findGroupForCountry(countryId);
+
+            group.forEach(id => {
+                const groupPath = countryPaths[id];
+
+                if (groupPath) {
+                    groupPath.classList.toggle(styles.highlightedRegion, forcedState);
+                }
+            });
+        };
+
+        const setHoveringOverCountry = (countryId: string, hovering: boolean) => {
+            setCountriesHoveringState(prevState => ({
+                ...prevState,
+                [countryId]: hovering,
+            }));
+
+            if (activeCountryMode === ActiveCountryModeEnum.HOVER && countriesToHighlight.includes(countryId)) {
+                toggleCountry(countryId, hovering);
+            } else {
+                const group = findGroupForCountry(countryId);
+
+                group.forEach(id => {
+                    const groupPath = countryPaths[id];
+
+                    if (groupPath) {
+                        groupPath.classList.toggle(styles.highlightedRegionHovered, hovering);
+                    }
+                });
+            }
+        };
+
+        svg.style.pointerEvents = 'none';
+
         countriesData.features.forEach(feature => {
             if (!feature.id) {
                 return;
@@ -171,7 +219,10 @@ const useWorldMap: UseWorldMap = ({
 
             if (countriesToHighlight && countriesToHighlight.includes(feature.id as string)) {
                 path.dataset.testid = `region-${feature.id}`;
-                path.classList.add(styles.highlightedRegion);
+                if (activeCountryMode === ActiveCountryModeEnum.NONE) {
+                    path.classList.add(styles.highlightedRegion);
+                }
+
                 countryPaths[feature.id as string] = path;
             }
 
@@ -181,6 +232,12 @@ const useWorldMap: UseWorldMap = ({
                         countryId: feature.id,
                         path,
                     });
+                }
+
+                console.log('click', feature.id);
+
+                if (activeCountryMode === ActiveCountryModeEnum.CLICK && countriesToHighlight.includes(feature.id as string)) {
+                    toggleCountry(feature.id as string);
                 }
             });
 
@@ -192,22 +249,9 @@ const useWorldMap: UseWorldMap = ({
                     });
                 }
 
-                if (activeCountryMode === ActiveCountryModeEnum.HOVER && countriesToHighlight.includes(feature.id as string)) {
-                    setCountriesActiveState(prevState => ({
-                        ...prevState,
-                        [feature.id as string]: true,
-                    }));
+                console.log('mouseover', feature.id);
 
-                    const group = findGroupForCountry(feature.id as string);
-
-                    group.forEach(id => {
-                        const groupPath = countryPaths[id];
-
-                        if (groupPath) {
-                            groupPath.classList.add(styles.highlightedRegionHovered);
-                        }
-                    });
-                }
+                setHoveringOverCountry(feature.id as string, true);
             });
 
             path.addEventListener('mouseout', () => {
@@ -218,28 +262,17 @@ const useWorldMap: UseWorldMap = ({
                     });
                 }
 
-                if (activeCountryMode === ActiveCountryModeEnum.HOVER && countriesToHighlight.includes(feature.id as string)) {
-                    setCountriesActiveState(prevState => ({
-                        ...prevState,
-                        [feature.id as string]: false,
-                    }));
+                console.log('mouseout', feature.id);
 
-                    const group = findGroupForCountry(feature.id as string);
-
-                    group.forEach(id => {
-                        const groupPath = countryPaths[id];
-
-                        if (groupPath) {
-                            groupPath.classList.remove(styles.highlightedRegionHovered);
-                        }
-                    });
-                }
+                setHoveringOverCountry(feature.id as string, false);
             });
 
             group.appendChild(path);
         });
 
         svg.appendChild(group);
+
+        svg.style.pointerEvents = 'auto';
     }, [
         countriesData,
         landData,
@@ -253,6 +286,7 @@ const useWorldMap: UseWorldMap = ({
         svgRef, {
             dimensions,
             activeCountry,
+            hoveringCountry,
         },
     ];
 };

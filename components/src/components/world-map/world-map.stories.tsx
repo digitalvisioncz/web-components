@@ -102,6 +102,45 @@ export const WithRegionsTooltip: WorldMapStoryObj = {
     },
 };
 
+export const WithRegionsTooltipClick: WorldMapStoryObj = {
+    args: {
+        activeCountryMode: ActiveCountryModeEnum.CLICK,
+        regions: [
+            {
+                countries: ['840'],
+                title: 'United States',
+                description: 'United States of America',
+            },
+        ],
+    },
+    play: async ({canvasElement}) => {
+        const mapElement = within(canvasElement).getByTestId('world-map');
+
+        await expect(mapElement).toBeInTheDocument();
+
+        const mapShadow = shadowWithin(mapElement);
+
+        const unitedStates = await mapShadow.findByShadowTestId('region-840');
+
+        await userEvent.click(unitedStates);
+
+        const tooltip = await mapShadow.findByShadowTestId('tooltip');
+
+        await expect(tooltip).toBeInTheDocument();
+        await expect(tooltip).toHaveClass(tooltipStyles.visible);
+
+        const tooltipTitle = await mapShadow.findByShadowTestId('tooltip-title');
+
+        await expect(tooltipTitle).toHaveTextContent('United States');
+
+        const tooltipDescription = await mapShadow.findByShadowTestId('tooltip-description');
+
+        await expect(tooltipDescription).toHaveTextContent('United States of America');
+
+        await userEvent.unhover(unitedStates);
+    },
+};
+
 export const WithTooltipTitleOnly: WorldMapStoryObj = {
     args: {
         activeCountryMode: ActiveCountryModeEnum.HOVER,

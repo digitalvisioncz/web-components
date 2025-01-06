@@ -33,6 +33,7 @@ const WorldMap = c(
             svgRef, {
                 dimensions,
                 activeCountry,
+                hoveringCountry,
             },
         ] = useWorldMap({
             countriesToHighlight,
@@ -59,14 +60,22 @@ const WorldMap = c(
         }, [activeRegionData]);
 
         useEffect(() => {
-            if (activeCountry && activeRegionDataHasTooltip) {
+            if (activeCountry === hoveringCountry && activeRegionDataHasTooltip) {
                 setShowTooltip(true);
 
                 return;
             }
 
             setShowTooltip(false);
-        }, [activeCountry, activeRegionDataHasTooltip]);
+        }, [
+            activeCountry,
+            hoveringCountry,
+            activeRegionDataHasTooltip,
+        ]);
+
+        console.log({
+            activeCountry, hoveringCountry, activeRegionDataHasTooltip, activeRegionData, showTooltip, countriesToHighlight, tooltipData, countryGroups, dimensions,
+        });
 
         return (
             <host

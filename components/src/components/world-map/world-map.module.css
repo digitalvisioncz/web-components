@@ -67,6 +67,6 @@
     }
 
     & .highlightedRegionHovered {
-        fill: var(--dv-world-map-region-background-hover, #b68903);
+        /* fill: var(--dv-world-map-region-background-hover, #b68903); */
     }
 }
