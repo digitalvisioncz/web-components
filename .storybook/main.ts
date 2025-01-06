@@ -19,10 +19,10 @@ export default {
         builder: '@storybook/builder-vite',
     },
     framework: {
-        name: getAbsolutePath('@storybook/web-components-vite') as string,
+        name: getAbsolutePath('@storybook/web-components-vite'),
         options: {},
     },
-    async viteFinal(config) {
+    async viteFinal(config: any) {
         const {mergeConfig} = await import('vite');
 
         return mergeConfig(config, {
@@ -46,11 +46,8 @@ export default {
             },
         });
     },
-    docs: {
-        autodocs: 'tag',
-    },
 };
 
-function getAbsolutePath(value: string): any {
+function getAbsolutePath(value: string): string {
     return dirname(require.resolve(join(value, 'package.json')));
 }
