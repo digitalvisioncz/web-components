@@ -199,8 +199,6 @@ const useWorldMap: UseWorldMap = ({
             }
         };
 
-        svg.style.pointerEvents = 'none';
-
         countriesData.features.forEach(feature => {
             if (!feature.id) {
                 return;
@@ -234,8 +232,6 @@ const useWorldMap: UseWorldMap = ({
                     });
                 }
 
-                console.log('click', feature.id);
-
                 if (activeCountryMode === ActiveCountryModeEnum.CLICK && countriesToHighlight.includes(feature.id as string)) {
                     toggleCountry(feature.id as string);
                 }
@@ -249,8 +245,6 @@ const useWorldMap: UseWorldMap = ({
                     });
                 }
 
-                console.log('mouseover', feature.id);
-
                 setHoveringOverCountry(feature.id as string, true);
             });
 
@@ -262,8 +256,6 @@ const useWorldMap: UseWorldMap = ({
                     });
                 }
 
-                console.log('mouseout', feature.id);
-
                 setHoveringOverCountry(feature.id as string, false);
             });
 
@@ -271,8 +263,6 @@ const useWorldMap: UseWorldMap = ({
         });
 
         svg.appendChild(group);
-
-        svg.style.pointerEvents = 'auto';
     }, [
         countriesData,
         landData,

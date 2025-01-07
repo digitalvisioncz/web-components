@@ -5,6 +5,7 @@ import {
     useEffect,
     useCallback,
     css,
+    useMemo,
 } from 'atomico';
 import clsx from 'clsx';
 
@@ -17,13 +18,36 @@ export enum TooltipPositionModeEnum {
     NONE = 'none',
 }
 
+type TooltipProps = {
+    isActive: boolean,
+    tooltipMode?: TooltipPositionModeEnum,
+};
+
 const Tooltip = c(
     ({
         isActive,
         tooltipMode = TooltipPositionModeEnum.HOVER,
-    }) => {
+    }: TooltipProps) => {
         const tooltipRef = useRef<HTMLDivElement>(null);
-        const [position, setPosition] = useState({ x: 0, y: 0 });
+        const [pinned, setPinned] = useState(false);
+        const [position, setPosition] = useState({x: 0, y: 0});
+
+        const isTooltipVisible = useMemo(() => {
+            if (tooltipMode === TooltipPositionModeEnum.NONE) {
+                return false;
+            }
+
+            if (tooltipMode === TooltipPositionModeEnum.CLICK) {
+                return isActive && pinned;
+            }
+
+            return isActive;
+        }, [
+            isActive,
+            position,
+            tooltipMode,
+            pinned,
+        ]);
 
         const updatePosition = useCallback((event: MouseEvent) => {
             const tooltip = tooltipRef.current;
@@ -32,7 +56,7 @@ const Tooltip = c(
                 return;
             }
 
-            const { clientX, clientY } = event;
+            const {clientX, clientY} = event;
             const tooltipRect = tooltip.getBoundingClientRect();
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
@@ -48,19 +72,29 @@ const Tooltip = c(
                 y = clientY - tooltipRect.height - 10;
             }
 
-            setPosition({ x, y });
+            setPosition({x, y});
         }, [setPosition, tooltipRef]);
 
         useEffect(() => {
             const handleMouseMove = (event: MouseEvent) => updatePosition(event);
+            const handleClick = (event: MouseEvent) => {
+                setPinned((prev: boolean) => !prev);
+                updatePosition(event);
+            };
 
             if (tooltipMode === TooltipPositionModeEnum.HOVER) {
                 window.addEventListener('mousemove', handleMouseMove);
             } else if (tooltipMode === TooltipPositionModeEnum.CLICK) {
-                window.addEventListener('click', handleMouseMove);
+                window.addEventListener('click', handleClick);
             }
 
-            return () => window.removeEventListener('mousemove', handleMouseMove);
+            return () => {
+                if (tooltipMode === TooltipPositionModeEnum.HOVER) {
+                    window.removeEventListener('mousemove', handleMouseMove);
+                } else if (tooltipMode === TooltipPositionModeEnum.CLICK) {
+                    window.removeEventListener('click', handleClick);
+                }
+            };
         }, []);
 
         return (
@@ -72,7 +106,7 @@ const Tooltip = c(
                     data-testid="tooltip"
                     className={clsx(
                         style.tooltip,
-                        isActive && style.visible,
+                        isTooltipVisible && style.visible,
                     )}
                     style={{
                         '--left': `${position.x}px`,

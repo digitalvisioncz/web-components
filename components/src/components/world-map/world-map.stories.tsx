@@ -12,6 +12,7 @@ import {within as shadowWithin} from 'shadow-dom-testing-library';
 
 import styles from './world-map.module.css';
 import tooltipStyles from '../tooltip/tooltip.module.css';
+import { TooltipPositionModeEnum } from '../tooltip/tooltip';
 
 export type WorldMapProps = Props<typeof WorldMap>;
 type WorldMapStoryObj = StoryObj<typeof WorldMap>;
@@ -102,7 +103,7 @@ export const WithRegionsTooltip: WorldMapStoryObj = {
     },
 };
 
-export const WithRegionsTooltipClick: WorldMapStoryObj = {
+export const WithRegionsClick: WorldMapStoryObj = {
     args: {
         activeCountryMode: ActiveCountryModeEnum.CLICK,
         regions: [
@@ -137,6 +138,7 @@ export const WithRegionsTooltipClick: WorldMapStoryObj = {
 
         await expect(tooltipDescription).toHaveTextContent('United States of America');
 
+        await userEvent.click(unitedStates);
         await userEvent.unhover(unitedStates);
     },
 };
@@ -215,6 +217,47 @@ export const WithTooltipDescriptionOnly: WorldMapStoryObj = {
     },
 };
 
+export const WithTooltipClick: WorldMapStoryObj = {
+    args: {
+        activeCountryMode: ActiveCountryModeEnum.HOVER,
+        tooltipMode: TooltipPositionModeEnum.CLICK,
+        regions: [
+            {
+                countries: ['840'],
+                title: 'United States',
+                description: 'United States of America',
+            },
+        ],
+    },
+    play: async ({canvasElement}) => {
+        const mapElement = within(canvasElement).getByTestId('world-map');
+
+        await expect(mapElement).toBeInTheDocument();
+
+        const mapShadow = shadowWithin(mapElement);
+
+        const unitedStates = await mapShadow.findByShadowTestId('region-840');
+
+        await userEvent.click(unitedStates);
+
+        const tooltip = await mapShadow.findByShadowTestId('tooltip');
+
+        await expect(tooltip).toBeInTheDocument();
+        await expect(tooltip).toHaveClass(tooltipStyles.visible);
+
+        const tooltipTitle = await mapShadow.findByShadowTestId('tooltip-title');
+
+        await expect(tooltipTitle).toHaveTextContent('United States');
+
+        const tooltipDescription = await mapShadow.findByShadowTestId('tooltip-description');
+
+        await expect(tooltipDescription).toHaveTextContent('United States of America');
+
+        await userEvent.click(unitedStates);
+        await userEvent.unhover(unitedStates);
+    },
+};
+
 export const WithCSSVariables: WorldMapStoryObj = {
     args: {
         activeCountryMode: ActiveCountryModeEnum.HOVER,
@@ -265,6 +308,47 @@ export const WithCSSVariables: WorldMapStoryObj = {
 
         await expect(tooltipDescription).toHaveStyle('color: #666');
 
+        await userEvent.unhover(unitedStates);
+    },
+};
+
+export const WithRegionsClickTooltipClick: WorldMapStoryObj = {
+    args: {
+        activeCountryMode: ActiveCountryModeEnum.CLICK,
+        tooltipMode: TooltipPositionModeEnum.CLICK,
+        regions: [
+            {
+                countries: ['840'],
+                title: 'United States',
+                description: 'United States of America',
+            },
+        ],
+    },
+    play: async ({canvasElement}) => {
+        const mapElement = within(canvasElement).getByTestId('world-map');
+
+        await expect(mapElement).toBeInTheDocument();
+
+        const mapShadow = shadowWithin(mapElement);
+
+        const unitedStates = await mapShadow.findByShadowTestId('region-840');
+
+        await userEvent.click(unitedStates);
+
+        const tooltip = await mapShadow.findByShadowTestId('tooltip');
+
+        await expect(tooltip).toBeInTheDocument();
+        await expect(tooltip).toHaveClass(tooltipStyles.visible);
+
+        const tooltipTitle = await mapShadow.findByShadowTestId('tooltip-title');
+
+        await expect(tooltipTitle).toHaveTextContent('United States');
+
+        const tooltipDescription = await mapShadow.findByShadowTestId('tooltip-description');
+
+        await expect(tooltipDescription).toHaveTextContent('United States of America');
+
+        await userEvent.click(unitedStates);
         await userEvent.unhover(unitedStates);
     },
 };

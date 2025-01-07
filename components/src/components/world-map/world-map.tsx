@@ -62,6 +62,12 @@ const WorldMap = c(
         }, [activeRegionData]);
 
         useEffect(() => {
+            if (tooltipMode === TooltipPositionModeEnum.CLICK && activeCountry && activeRegionDataHasTooltip) {
+                setShowTooltip(true);
+
+                return;
+            }
+
             if (activeCountry === hoveringCountry && activeRegionDataHasTooltip) {
                 setShowTooltip(true);
 
@@ -92,7 +98,7 @@ const WorldMap = c(
                     >
                     </svg>
                 </div>
-                <Tooltip isActive={showTooltip}>
+                <Tooltip tooltipMode={tooltipMode} isActive={showTooltip}>
                     <div
                         slot="tooltip"
                         className={styles.tooltipWrapper}
