@@ -11,12 +11,19 @@ import clsx from 'clsx';
 import style from './tooltip.module.css';
 import stylesInline from './tooltip.module.css?inline';
 
+export enum TooltipPositionModeEnum {
+    CLICK = 'click',
+    HOVER = 'hover',
+    NONE = 'none',
+}
+
 const Tooltip = c(
     ({
         isActive,
+        tooltipMode = TooltipPositionModeEnum.HOVER,
     }) => {
         const tooltipRef = useRef<HTMLDivElement>(null);
-        const [position, setPosition] = useState({x: 0, y: 0});
+        const [position, setPosition] = useState({ x: 0, y: 0 });
 
         const updatePosition = useCallback((event: MouseEvent) => {
             const tooltip = tooltipRef.current;
@@ -25,7 +32,7 @@ const Tooltip = c(
                 return;
             }
 
-            const {clientX, clientY} = event;
+            const { clientX, clientY } = event;
             const tooltipRect = tooltip.getBoundingClientRect();
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
@@ -41,13 +48,17 @@ const Tooltip = c(
                 y = clientY - tooltipRect.height - 10;
             }
 
-            setPosition({x, y});
+            setPosition({ x, y });
         }, [setPosition, tooltipRef]);
 
         useEffect(() => {
             const handleMouseMove = (event: MouseEvent) => updatePosition(event);
 
-            window.addEventListener('mousemove', handleMouseMove);
+            if (tooltipMode === TooltipPositionModeEnum.HOVER) {
+                window.addEventListener('mousemove', handleMouseMove);
+            } else if (tooltipMode === TooltipPositionModeEnum.CLICK) {
+                window.addEventListener('click', handleMouseMove);
+            }
 
             return () => window.removeEventListener('mousemove', handleMouseMove);
         }, []);
@@ -77,6 +88,10 @@ const Tooltip = c(
         props: {
             isActive: {
                 type: Boolean,
+                reflect: true,
+            },
+            tooltipMode: {
+                type: String,
                 reflect: true,
             },
         },

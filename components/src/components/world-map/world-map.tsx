@@ -5,18 +5,20 @@ import {
     useMemo,
     useState,
 } from 'atomico';
-import {useChildNodes} from '@atomico/hooks/use-child-nodes';
+import { useChildNodes } from '@atomico/hooks/use-child-nodes';
 
 import useMapData from './hooks/useMapData';
-import useWorldMap, {ActiveCountryModeEnum} from './hooks/useWorldMap';
+import useWorldMap, { ActiveCountryModeEnum } from './hooks/useWorldMap';
 import Tooltip from '../tooltip';
 
 import styles from './world-map.module.css';
 import stylesInline from './world-map.module.css?inline';
+import { TooltipPositionModeEnum } from '../tooltip/tooltip';
 
 const WorldMap = c(
     ({
         activeCountryMode,
+        tooltipMode,
         regions,
     }) => {
         const childNodes = useChildNodes();
@@ -72,10 +74,6 @@ const WorldMap = c(
             hoveringCountry,
             activeRegionDataHasTooltip,
         ]);
-
-        console.log({
-            activeCountry, hoveringCountry, activeRegionDataHasTooltip, activeRegionData, showTooltip, countriesToHighlight, tooltipData, countryGroups, dimensions,
-        });
 
         return (
             <host
@@ -140,6 +138,11 @@ const WorldMap = c(
                 type: String,
                 reflect: true,
                 value: ActiveCountryModeEnum.HOVER,
+            },
+            tooltipMode: {
+                type: String,
+                reflect: true,
+                value: TooltipPositionModeEnum.HOVER,
             },
             regions: {
                 type: Array,
