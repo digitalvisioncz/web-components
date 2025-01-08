@@ -5,15 +5,15 @@ import {
     useMemo,
     useState,
 } from 'atomico';
-import { useChildNodes } from '@atomico/hooks/use-child-nodes';
+import {useChildNodes} from '@atomico/hooks/use-child-nodes';
 
 import useMapData from './hooks/useMapData';
-import useWorldMap, { ActiveCountryModeEnum } from './hooks/useWorldMap';
+import useWorldMap, {ActiveCountryModeEnum} from './hooks/useWorldMap';
 import Tooltip from '../tooltip';
 
 import styles from './world-map.module.css';
 import stylesInline from './world-map.module.css?inline';
-import { TooltipPositionModeEnum } from '../tooltip/tooltip';
+import {TooltipPositionModeEnum} from '../tooltip/tooltip';
 
 const WorldMap = c(
     ({

@@ -14,23 +14,29 @@ import stylesInline from './tooltip.module.css?inline';
 
 export enum TooltipPositionModeEnum {
     CLICK = 'click',
-    HOVER = 'hover',
+    FOLLOW_MOUSE = 'follow_mouse',
+    STATIC = 'static',
     NONE = 'none',
 }
 
 type TooltipProps = {
     isActive: boolean,
     tooltipMode?: TooltipPositionModeEnum,
+    position?: {
+        x: number,
+        y: number,
+    },
 };
 
 const Tooltip = c(
     ({
         isActive,
-        tooltipMode = TooltipPositionModeEnum.HOVER,
+        tooltipMode = TooltipPositionModeEnum.FOLLOW_MOUSE,
+        position: positionFromProps,
     }: TooltipProps) => {
         const tooltipRef = useRef<HTMLDivElement>(null);
         const [pinned, setPinned] = useState(false);
-        const [position, setPosition] = useState({x: 0, y: 0});
+        const [position, setPosition] = useState(positionFromProps || {x: 0, y: 0});
 
         const isTooltipVisible = useMemo(() => {
             if (tooltipMode === TooltipPositionModeEnum.NONE) {
@@ -48,6 +54,12 @@ const Tooltip = c(
             tooltipMode,
             pinned,
         ]);
+
+        useEffect(() => {
+            if (positionFromProps?.x !== undefined && positionFromProps?.y !== undefined) {
+                setPosition(positionFromProps);
+            }
+        }, [positionFromProps]);
 
         const updatePosition = useCallback((event: MouseEvent) => {
             const tooltip = tooltipRef.current;
@@ -82,14 +94,14 @@ const Tooltip = c(
                 updatePosition(event);
             };
 
-            if (tooltipMode === TooltipPositionModeEnum.HOVER) {
+            if (tooltipMode === TooltipPositionModeEnum.FOLLOW_MOUSE) {
                 window.addEventListener('mousemove', handleMouseMove);
             } else if (tooltipMode === TooltipPositionModeEnum.CLICK) {
                 window.addEventListener('click', handleClick);
             }
 
             return () => {
-                if (tooltipMode === TooltipPositionModeEnum.HOVER) {
+                if (tooltipMode === TooltipPositionModeEnum.FOLLOW_MOUSE) {
                     window.removeEventListener('mousemove', handleMouseMove);
                 } else if (tooltipMode === TooltipPositionModeEnum.CLICK) {
                     window.removeEventListener('click', handleClick);
