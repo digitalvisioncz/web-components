@@ -5,7 +5,7 @@ import * as WorldMapStories from './world-map.stories';
 
 # World Map
 
-Web component for simple world map with configurable countries/regions and optional tooltips on hover.
+Web component for simple world map with configurable countries/regions and optional tooltips. Stylable with CSS variables. Framework agnostic. 
 
 ## Install
 
@@ -66,11 +66,10 @@ import '@dvdevcz/components/world-map';
 <Markdown>{`
 | Property      | description                                                                                     | Type                | Example value       |
 | :------------ | :---------------------------------------------------------------------------------------------- | :------------------ | :------------------ |
-| *countries*   | Array of country codes ([ISO 3166-1 numeric](https://en.wikipedia.org/wiki/ISO_3166-1_numeric)) | string[]            | ["840"]             |
-| *title*       | Tooltip title copy (optional)                                                                   | string              | USA                 |
-| *description* | Tooltip description copy (optional)                                                             | string \| string[]  | Strategic purchases |
+| *activeCountryMode* | Mode for activating countries (click, hover, none)                                        | string              | hover               |
+| *tooltipMode* | Mode for displaying tooltips (click, follow_mouse, none)                                        | string              | follow_mouse               |
+| *regions*     | Array of region objects containing country codes, titles, and descriptions                      | object[]            | [{ "countries": ["840"], "title": "USA", "description": "Strategic purchases" }] |
 `}</Markdown>
-
 ## Styling
 
 <Markdown>{`
