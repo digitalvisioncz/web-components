@@ -55,40 +55,45 @@ const Tooltip = c(
 
         useEffect(() => {
             if (positionFromProps?.x !== undefined && positionFromProps?.y !== undefined) {
-                setPosition(positionFromProps);
+                updatePosition(positionFromProps?.x, positionFromProps?.y);
             }
         }, [positionFromProps]);
 
-        const updatePosition = useCallback((event: MouseEvent) => {
+        const handleUpdatePosition = useCallback((event: MouseEvent) => {
+            const {clientX, clientY} = event;
+
+            updatePosition(clientX, clientY);
+        }, [setPosition, tooltipRef]);
+
+        const updatePosition = useCallback((newX, newY) => {
             const tooltip = tooltipRef.current;
 
             if (!tooltip) {
                 return;
             }
 
-            const {clientX, clientY} = event;
             const tooltipRect = tooltip.getBoundingClientRect();
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
 
-            let x = clientX + 10;
-            let y = clientY + 10;
+            let x = newX + 10;
+            let y = newY + 10;
 
             if (x + tooltipRect.width > viewportWidth) {
-                x = clientX - tooltipRect.width - 10;
+                x = newX - tooltipRect.width - 10;
             }
 
             if (y + tooltipRect.height > viewportHeight) {
-                y = clientY - tooltipRect.height - 10;
+                y = newY - tooltipRect.height - 10;
             }
 
             setPosition({x, y});
         }, [setPosition, tooltipRef]);
 
         useEffect(() => {
-            const handleMouseMove = (event: MouseEvent) => updatePosition(event);
+            const handleMouseMove = (event: MouseEvent) => handleUpdatePosition(event);
             const handleClick = (event: MouseEvent) => {
-                updatePosition(event);
+                handleUpdatePosition(event);
             };
 
             if (tooltipMode === TooltipPositionModeEnum.FOLLOW_MOUSE) {

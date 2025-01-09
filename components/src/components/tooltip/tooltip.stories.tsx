@@ -64,3 +64,24 @@ export const TooltipPositionClick: TooltipStoryObj = {
     },
 };
 
+export const TooltipPositionStatic: TooltipStoryObj = {
+    args: {
+        isActive: true,
+        tooltipMode: TooltipPositionModeEnum.STATIC,
+        position: {
+            x: 100,
+            y: 100,
+        },
+    },
+    play: async ({canvasElement}) => {
+        const tooltipWrapper = within(canvasElement).getByTestId('wrapper');
+
+        await expect(tooltipWrapper).toBeInTheDocument();
+
+        const canvasShadow = shadowWithin(tooltipWrapper);
+
+        const tooltipElement = await canvasShadow.findByShadowTestId('tooltip');
+
+        await expect(tooltipElement).toBeInTheDocument();
+    },
+};
