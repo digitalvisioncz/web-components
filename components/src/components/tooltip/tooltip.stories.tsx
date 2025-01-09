@@ -7,6 +7,7 @@ import {
 import {Props} from 'atomico';
 import Tooltip from './index';
 import {TooltipPositionModeEnum} from './tooltip';
+import {within as shadowWithin} from 'shadow-dom-testing-library';
 
 export type TooltipProps = Props<typeof Tooltip>;
 type TooltipStoryObj = StoryObj<typeof Tooltip>;
@@ -15,7 +16,7 @@ const meta: Meta<TooltipStoryObj> = {
     title: 'Components/Tooltip',
     ...define(Tooltip),
     render: args => (
-        <div data-testid="wrapper">
+        <div data-testid="wrapper" style={{width: '200px', height: '200px'}}>
             <Tooltip {...args}>
                 <div slot="tooltip" data-testid="tooltip-content">
                     Tooltip
@@ -37,7 +38,9 @@ export const Default: TooltipStoryObj = {
 
         await expect(tooltipWrapper).toBeInTheDocument();
 
-        const tooltipElement = within(canvasElement).getByTestId('tooltip-content');
+        const canvasShadow = shadowWithin(tooltipWrapper);
+
+        const tooltipElement = await canvasShadow.findByShadowTestId('tooltip');
 
         await expect(tooltipElement).toBeInTheDocument();
     },
@@ -53,7 +56,9 @@ export const TooltipPositionClick: TooltipStoryObj = {
 
         await expect(tooltipWrapper).toBeInTheDocument();
 
-        const tooltipElement = within(canvasElement).getByTestId('tooltip-content');
+        const canvasShadow = shadowWithin(tooltipWrapper);
+
+        const tooltipElement = await canvasShadow.findByShadowTestId('tooltip');
 
         await expect(tooltipElement).toBeInTheDocument();
     },

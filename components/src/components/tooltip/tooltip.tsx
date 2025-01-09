@@ -35,7 +35,6 @@ const Tooltip = c(
         position: positionFromProps,
     }: TooltipProps) => {
         const tooltipRef = useRef<HTMLDivElement>(null);
-        const [pinned, setPinned] = useState(false);
         const [position, setPosition] = useState(positionFromProps || {x: 0, y: 0});
 
         const isTooltipVisible = useMemo(() => {
@@ -44,7 +43,7 @@ const Tooltip = c(
             }
 
             if (tooltipMode === TooltipPositionModeEnum.CLICK) {
-                return isActive && pinned;
+                return isActive;
             }
 
             return isActive;
@@ -52,7 +51,6 @@ const Tooltip = c(
             isActive,
             position,
             tooltipMode,
-            pinned,
         ]);
 
         useEffect(() => {
@@ -90,7 +88,6 @@ const Tooltip = c(
         useEffect(() => {
             const handleMouseMove = (event: MouseEvent) => updatePosition(event);
             const handleClick = (event: MouseEvent) => {
-                setPinned((prev: boolean) => !prev);
                 updatePosition(event);
             };
 

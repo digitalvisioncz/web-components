@@ -22,7 +22,7 @@ const WorldMap = c(
         regions,
     }) => {
         const childNodes = useChildNodes();
-        const [showTooltip, setShowTooltip] = useState(false);
+        const [tooltipPinned, pinTooltip] = useState(false);
         const {
             countriesToHighlight,
             tooltipData,
@@ -61,24 +61,40 @@ const WorldMap = c(
             return activeRegionData.title || activeRegionData.description;
         }, [activeRegionData]);
 
-        useEffect(() => {
+        const showTooltip = useMemo(() => {
             if (tooltipMode === TooltipPositionModeEnum.CLICK && activeCountry && activeRegionDataHasTooltip) {
-                setShowTooltip(true);
-
-                return;
+                return tooltipPinned;
             }
 
             if (activeCountry === hoveringCountry && activeRegionDataHasTooltip) {
-                setShowTooltip(true);
-
-                return;
+                return true;
             }
 
-            setShowTooltip(false);
+            return false;
         }, [
             activeCountry,
             hoveringCountry,
             activeRegionDataHasTooltip,
+            tooltipPinned,
+        ]);
+
+        useEffect(() => {
+            if (tooltipMode !== TooltipPositionModeEnum.CLICK) return;
+
+            const handleClick = () => {
+                if (activeCountry !== hoveringCountry) return pinTooltip(false);
+
+                pinTooltip((prev: boolean) => !prev);
+            };
+
+            window.addEventListener('click', handleClick);
+
+            return () => window.removeEventListener('click', handleClick);
+        }, [
+            activeCountry,
+            hoveringCountry,
+            activeRegionDataHasTooltip,
+            tooltipPinned,
         ]);
 
         return (
@@ -148,7 +164,7 @@ const WorldMap = c(
             tooltipMode: {
                 type: String,
                 reflect: true,
-                value: TooltipPositionModeEnum.HOVER,
+                value: TooltipPositionModeEnum.FOLLOW_MOUSE,
             },
             regions: {
                 type: Array,

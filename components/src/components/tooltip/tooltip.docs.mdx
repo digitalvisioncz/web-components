@@ -9,7 +9,7 @@ Web component for displaying informative text when users hover over, focus on, o
 
 ## Install
 
-You can use this component with a script tag in your `<head>` element:
+You can use this component with a script tag in your [`<head>`](command:_github.copilot.openSymbolFromReferences?%5B%22%3Chead%3E%22%2C%5B%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fjakubsadilek%2FDV%2Fweb-components%2Fcomponents%2Findex.html%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fjakubsadilek%2FDV%2Fweb-components%2Fcomponents%2Findex.html%22%2C%22path%22%3A%22%2FUsers%2Fjakubsadilek%2FDV%2Fweb-components%2Fcomponents%2Findex.html%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A3%2C%22character%22%3A2%7D%7D%5D%5D "Go to definition") element:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@dvdevcz/components@latest/dist/tooltip.js" type="module"></script>
@@ -27,6 +27,30 @@ import '@dvdevcz/components/tooltip';
 
 ## Usage
 
+To use the Tooltip component, you can include it in your HTML or JSX as follows:
+
+```html
+<dv-tooltip isActive="true" tooltipMode="follow_mouse">
+  <div slot="tooltip">Tooltip Content</div>
+</dv-tooltip>
+```
+
+```jsx
+import Tooltip from '@dvdevcz/components/tooltip';
+
+const App = () => (
+  <Tooltip isActive={true} tooltipMode="follow_mouse">
+    <div slot="tooltip">Tooltip Content</div>
+  </Tooltip>
+);
+```
+
 ## Props
 
-## Styling
+<Markdown>{`
+| Prop         | Type                              | Default                  | Description                                                                 |
+|--------------|-----------------------------------|--------------------------|-----------------------------------------------------------------------------|
+| isActive     | boolean                           | false                    | Determines if the tooltip is active and visible.                            |
+| tooltipMode  | TooltipPositionModeEnum           | follow_mouse             | Sets the mode for tooltip positioning. Options: click, follow_mouse, static, none. |
+| position     | { x: number, y: number }          | { x: 0, y: 0 }           | Sets the static position of the tooltip when tooltipMode is static.         |
+`}</Markdown>

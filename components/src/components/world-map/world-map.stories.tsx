@@ -12,7 +12,7 @@ import {within as shadowWithin} from 'shadow-dom-testing-library';
 
 import styles from './world-map.module.css';
 import tooltipStyles from '../tooltip/tooltip.module.css';
-import { TooltipPositionModeEnum } from '../tooltip/tooltip';
+import {TooltipPositionModeEnum} from '../tooltip/tooltip';
 
 export type WorldMapProps = Props<typeof WorldMap>;
 type WorldMapStoryObj = StoryObj<typeof WorldMap>;
