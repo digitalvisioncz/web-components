@@ -6,7 +6,9 @@ import {
 } from '@storybook/test';
 import {Props} from 'atomico';
 import Tooltip from './index';
-import {TooltipPositionModeEnum} from './tooltip';
+import {
+    TooltipAnchorX, TooltipAnchorY, TooltipPositionModeEnum,
+} from './tooltip';
 import {within as shadowWithin} from 'shadow-dom-testing-library';
 
 export type TooltipProps = Props<typeof Tooltip>;
@@ -16,7 +18,12 @@ const meta: Meta<TooltipStoryObj> = {
     title: 'Components/Tooltip',
     ...define(Tooltip),
     render: args => (
-        <div data-testid="wrapper" style={{width: '200px', height: '200px'}}>
+        <div
+            data-testid="wrapper"
+            style={{
+                width: '100%', height: '500px', border: '1px dashed rgba(0,0,0,0.3)', borderRadius: '8px',
+            }}
+        >
             <Tooltip {...args}>
                 <div slot="tooltip" data-testid="tooltip-content">
                     Tooltip
@@ -50,6 +57,10 @@ export const TooltipPositionClick: TooltipStoryObj = {
     args: {
         isActive: true,
         tooltipMode: TooltipPositionModeEnum.CLICK,
+        position: {
+            x: 100,
+            y: 100,
+        },
     },
     play: async ({canvasElement}) => {
         const tooltipWrapper = within(canvasElement).getByTestId('wrapper');
@@ -72,6 +83,25 @@ export const TooltipPositionStatic: TooltipStoryObj = {
             x: 100,
             y: 100,
         },
+    },
+    play: async ({canvasElement}) => {
+        const tooltipWrapper = within(canvasElement).getByTestId('wrapper');
+
+        await expect(tooltipWrapper).toBeInTheDocument();
+
+        const canvasShadow = shadowWithin(tooltipWrapper);
+
+        const tooltipElement = await canvasShadow.findByShadowTestId('tooltip');
+
+        await expect(tooltipElement).toBeInTheDocument();
+    },
+};
+
+export const AnchorBottomRight: TooltipStoryObj = {
+    args: {
+        isActive: true,
+        tooltipMode: TooltipPositionModeEnum.FOLLOW_MOUSE,
+        anchor: {x: TooltipAnchorX.RIGHT, y: TooltipAnchorY.BOTTOM},
     },
     play: async ({canvasElement}) => {
         const tooltipWrapper = within(canvasElement).getByTestId('wrapper');

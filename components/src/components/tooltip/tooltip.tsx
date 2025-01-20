@@ -19,13 +19,33 @@ export enum TooltipPositionModeEnum {
     NONE = 'none',
 }
 
+export enum TooltipAnchorX {
+    LEFT = 'left',
+    CENTER = 'center',
+    RIGHT = 'right',
+}
+
+export enum TooltipAnchorY {
+    TOP = 'top',
+    CENTER = 'center',
+    BOTTOM = 'bottom',
+}
+
+type TooltipAnchor = {
+    x: TooltipAnchorX | number,
+    y: TooltipAnchorY | number,
+};
+
+type TooltipPosition = {
+    x: number,
+    y: number,
+};
+
 type TooltipProps = {
     isActive: boolean,
     tooltipMode?: TooltipPositionModeEnum,
-    position?: {
-        x: number,
-        y: number,
-    },
+    position?: TooltipPosition,
+    anchor?: TooltipAnchor,
 };
 
 const Tooltip = c(
@@ -33,6 +53,7 @@ const Tooltip = c(
         isActive,
         tooltipMode = TooltipPositionModeEnum.FOLLOW_MOUSE,
         position: positionFromProps,
+        anchor = {x: TooltipAnchorX.LEFT, y: TooltipAnchorY.TOP},
     }: TooltipProps) => {
         const tooltipRef = useRef<HTMLDivElement>(null);
         const [position, setPosition] = useState(positionFromProps || {x: 0, y: 0});
@@ -76,15 +97,42 @@ const Tooltip = c(
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
 
-            let x = newX + 10;
-            let y = newY + 10;
+            // new tooltip positioning solution with anchoring based on anchor props
+            let x = newX;
+            let y = newY;
 
-            if (x + tooltipRect.width > viewportWidth) {
-                x = newX - tooltipRect.width - 10;
+            const anchorMargin = 10;
+
+            if (anchor.x === TooltipAnchorX.LEFT) {
+                x += anchorMargin;
+            } else if (anchor.x === TooltipAnchorX.CENTER) {
+                x -= tooltipRect.width / 2;
+            } else if (anchor.x === TooltipAnchorX.RIGHT) {
+                x -= tooltipRect.width + anchorMargin;
             }
 
-            if (y + tooltipRect.height > viewportHeight) {
-                y = newY - tooltipRect.height - 10;
+            if (anchor.y === TooltipAnchorY.TOP) {
+                y += anchorMargin;
+            } else if (anchor.y === TooltipAnchorY.CENTER) {
+                y -= tooltipRect.height / 2;
+            } else if (anchor.y === TooltipAnchorY.BOTTOM) {
+                y -= tooltipRect.height + anchorMargin;
+            }
+
+            if (x + tooltipRect.width + anchorMargin > viewportWidth) {
+                x = viewportWidth - tooltipRect.width - anchorMargin;
+            }
+
+            if (y + tooltipRect.height + anchorMargin > viewportHeight) {
+                y = viewportHeight - tooltipRect.height - anchorMargin;
+            }
+
+            if (x < 0) {
+                x = anchorMargin;
+            }
+
+            if (y < 0) {
+                y = anchorMargin;
             }
 
             setPosition({x, y});
@@ -140,6 +188,14 @@ const Tooltip = c(
             },
             tooltipMode: {
                 type: String,
+                reflect: true,
+            },
+            position: {
+                type: Object,
+                reflect: true,
+            },
+            anchor: {
+                type: Object,
                 reflect: true,
             },
         },
